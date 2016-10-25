@@ -28,6 +28,7 @@ app.controller("filterCtrl", function($scope, $http, $location) {
         
 
         $scope.items = data;
+        $scope.nooh="Helloooo";
         $scope.currentPage = 1;
         $scope.pageSize = ($scope.items.config.paginationcount > 0)?$scope.items.config.paginationcount:10;
         $scope.checkFilter = filterObj;

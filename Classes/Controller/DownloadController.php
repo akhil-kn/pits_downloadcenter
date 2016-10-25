@@ -1,11 +1,13 @@
 <?php
 namespace PITS\PitsDownloadcenter\Controller;
+
 use TYPO3\CMS\Core\Resource\Collection\FolderBasedFileCollection;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Resource\FileRepository;
 use TYPO3\CMS\Core\Resource\ResourceStorage;
 use PITS\PitsDownloadcenter\Handlers\ContentTypeHandler;
+
 /***************************************************************
  *
  *  Copyright notice
@@ -41,7 +43,8 @@ class DownloadController extends AbstractController {
      *
      * @return void
      */
-    public function listAction() {
+    public function listAction() 
+    {
         $config = $this->settings;
         $transilations = $this->getPageTranslations();
         $filetypesObject = $this->filetypeRepository->findAll();
@@ -95,7 +98,8 @@ class DownloadController extends AbstractController {
      * 
      * @return void
      */ 
-    public function showAction() {
+    public function showAction() 
+    {
         ini_set( 'memory_limit', '-1' );
         $config = $this->settings;     
         $transilations = $this->getPageTranslations();
@@ -126,7 +130,8 @@ class DownloadController extends AbstractController {
      * force download PHP Script
      * @void 
      */
-    public function forceDownloadAction(){
+    public function forceDownloadAction()
+    {
         $encrypted_fileID = ( $this->request->hasArgument('fileid'))?$this->request->getArgument('fileid'):0;
         $fileID= openssl_decrypt( base64_decode( $encrypted_fileID ) , $this->encryptionMethod, $this->encryptionKey , TRUE , $this->initializationVector );
         if( is_numeric($fileID)) {

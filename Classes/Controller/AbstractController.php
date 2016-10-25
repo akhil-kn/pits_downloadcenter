@@ -35,7 +35,8 @@ use TYPO3\CMS\Core\Resource\ResourceStorage;
  * AbstractController
  */
 abstract class AbstractController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController {
-	/**
+	
+    /**
      * downloadRepository
      *
      * @var \PITS\PitsDownloadcenter\Domain\Repository\DownloadRepository
@@ -262,10 +263,12 @@ abstract class AbstractController extends \TYPO3\CMS\Extbase\Mvc\Controller\Acti
      *
      * @return Image
      **/
-    public function processImage($fileObj,$file, $title, $size_w, $size_h) {
-        $cObj           = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer');
+    public function processImage($fileObj, $file, $title, $size_w, $size_h) {
+        $cObj = GeneralUtility::makeInstance('TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer');
         $file = urldecode( $file );
-        $response   =   $cObj->IMG_RESOURCE( array(
+        $response   =   $cObj->cObjGetSingle( 
+                            'IMG_RESOURCE',
+                            array(
                             'file.'=>array('treatAsReference'=>1, 'width'=>$size_w, 'height'=>$size_h, ),
                             'file' => $fileObj->getUid()
                             )
