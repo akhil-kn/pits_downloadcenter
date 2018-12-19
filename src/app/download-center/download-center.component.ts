@@ -2,6 +2,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { PaginationInstance } from 'ngx-pagination';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 import { DownloadCenterService } from './download-center.service';
 
@@ -30,6 +32,8 @@ export class DownloadCenterComponent implements OnInit, OnDestroy {
   public filterConfig: FilterConfig = { keyword_search: '', category: '', sub_category: '', file_types: [] };
   public config: PaginationInstance = { id: 'custom', itemsPerPage: 10, currentPage: 1 };
 
+  private _unsubscribe$ = new Subject();
+
   constructor(
     private _downloadCenterService: DownloadCenterService,
     private _router: Router,
@@ -54,6 +58,7 @@ export class DownloadCenterComponent implements OnInit, OnDestroy {
   private _fetchData(): void {
     this.loading = true;
     this._downloadCenterService.getData()
+      .pipe(takeUntil(this._unsubscribe$))
       .subscribe((data) => {
         this.loading = false;
         this.listData = data;
@@ -65,18 +70,22 @@ export class DownloadCenterComponent implements OnInit, OnDestroy {
   }
 
   private _listenActivatedRoute(): void {
-    this._activatedRoute.queryParams.subscribe((params) => {
-      params['category'] && this.fetchSubCategory(params['category']);
-      this.filterConfig.file_types = params['filter'] ? params['filter'].split(',') : [];
-      this.filterFormGroup.patchValue(params);
-    });
+    this._activatedRoute.queryParams
+      .pipe(takeUntil(this._unsubscribe$))
+      .subscribe((params) => {
+        params['category'] && this.fetchSubCategory(params['category']);
+        this.filterConfig.file_types = params['file_types'] ? params['file_types'].split(',') : [];
+        this.filterFormGroup.patchValue(params);
+      });
   }
 
   private _listenFilterFormValueChanges() {
-    this.filterFormGroup.valueChanges.subscribe((res) => {
-      Object.assign(this.filterConfig, res);
-      this._filterList(this.filterConfig);
-    });
+    this.filterFormGroup.valueChanges
+      .pipe(takeUntil(this._unsubscribe$))
+      .subscribe((res) => {
+        Object.assign(this.filterConfig, res);
+        this._filterList(this.filterConfig);
+      });
   }
 
   private _filterList(config: FilterConfig): void {
@@ -90,10 +99,7 @@ export class DownloadCenterComponent implements OnInit, OnDestroy {
   }
 
   private _setRouting(config: FilterConfig): void {
-    const { keyword_search, category, sub_category, file_types } = config;
-    const fileTypes = file_types;
-    // tslint:disable-next-line:max-line-length
-    const queryParams = `keyword_search=${keyword_search}&&category=${category}&&sub_category=${sub_category}&&filter=${fileTypes.toString()}`;
+    const queryParams = _.join(Object.keys(config).filter((key) => !!config[key].length).map((key) => `${key}=${config[key]}`), '&&');
     this._router.navigateByUrl(`/download-center?${queryParams}`);
   }
 
@@ -126,14 +132,14 @@ export class DownloadCenterComponent implements OnInit, OnDestroy {
     this.resetFieldByType('sub_category');
   }
 
-  public filterListByFileType(id: string, checked: boolean) {
+  public patchFileTypes(id: string, checked: boolean) {
     const types = this.filterConfig.file_types;
     const index = types.indexOf(id);
     (checked) ? (index === -1) && this.filterConfig.file_types.push(id) : this.filterConfig.file_types.splice(index, 1);
     this._filterList(this.filterConfig);
   }
 
-  public resetFieldByType(field_type) {
+  public resetFieldByType(field_type: string): void {
     const formValue = this.filterFormGroup.getRawValue();
     if (!formValue[field_type]) {
       return;
@@ -157,6 +163,9 @@ export class DownloadCenterComponent implements OnInit, OnDestroy {
     this.listData['files'] = _.orderBy(this.listData['files'], order_by, sort_order);
   }
 
-  ngOnDestroy() { }
+  ngOnDestroy() {
+    this._unsubscribe$.next();
+    this._unsubscribe$.complete();
+  }
 
 }

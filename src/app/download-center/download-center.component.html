@@ -44,7 +44,7 @@
               <div class="chk-box-blue ng-scope" *ngFor="let type of listData?.types;trackBy: trackByFn">
                 <label class="control-label">
                   <input type="checkbox" [attr.checked]="filterConfig.file_types?.indexOf(type.id+'')!==-1?true:null"
-                    [value]="type.id" (change)="filterListByFileType(type.id+'',$event.target.checked)">
+                    [value]="type.id" (change)="patchFileTypes(type.id+'',$event.target.checked)">
                   {{type.title}}
                 </label>
               </div>
