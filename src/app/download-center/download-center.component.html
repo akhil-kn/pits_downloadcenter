@@ -2,7 +2,7 @@
   <h1>Download Center</h1>
   <div id="downloadcenter" class="wrap filter43">
     <div id="loader" *ngIf="loading; else filter_container">
-      <img src="http://192.168.0.48:10068/typo3conf/ext/pits_downloadcenter/Resources/Public/Icons/ajax-loader.gif" alt="Loader-Image">
+      <img src="assets/icons/ajax-loader.gif" alt="Loader-Image">
     </div>
     <ng-template #filter_container>
       <div class="filter-wrapper">
@@ -92,7 +92,7 @@
                 <tbody>
                   <tr *ngFor="let file of listData?.files| paginate: config;trackBy: trackByFn">
                     <td class="item-image">
-                      <img class="img-thumbnail" [attr.src]="file.imageUrl">
+                      <img class="img-thumbnail" [src]="file.imageUrl" (error)="img_preview.src = './assets/icons/noimage.jpg'" #img_preview>
                     </td>
                     <td class="item-title">{{file.title}}</td>
                     <td>{{file.size}}</td>

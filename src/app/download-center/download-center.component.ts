@@ -75,7 +75,7 @@ export class DownloadCenterComponent implements OnInit, OnDestroy {
     this._activatedRoute.queryParams
       .pipe(take(1))
       .subscribe((params) => {
-        this.config.currentPage = this.filterConfig.cPage = params['cPage'];
+        params['cPage'] && (this.config.currentPage = this.filterConfig.cPage = params['cPage']);
         params['category'] && this.fetchSubCategory(params['category']);
         this.filterConfig.file_types = params['file_types'] ? params['file_types'].split(',') : [];
         this.filterFormGroup.patchValue(params);
@@ -102,9 +102,8 @@ export class DownloadCenterComponent implements OnInit, OnDestroy {
   }
 
   private _setRouting(config: FilterConfig): void {
-    console.log('setrouting', config);
     const queryParams = _.join(Object.keys(config).filter((key) => !!config[key].length).map((key) => `${key}=${config[key]}`), '&&');
-    this._router.navigateByUrl(`/download-center?${queryParams}`);
+    this._router.navigateByUrl(`/?${queryParams}`);
   }
 
   private _keyWordFilter(data: object) {
