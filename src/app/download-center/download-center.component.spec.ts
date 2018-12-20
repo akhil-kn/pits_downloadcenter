@@ -1,5 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientModule } from '@angular/common/http';
+import { ReactiveFormsModule } from '@angular/forms';
+import { NgxPaginationModule } from 'ngx-pagination';
 
+import { AppRoutingModule } from './../app-routing.module';
 import { DownloadCenterComponent } from './download-center.component';
 
 describe('DownloadCenterComponent', () => {
@@ -8,9 +12,10 @@ describe('DownloadCenterComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DownloadCenterComponent ]
+      declarations: [DownloadCenterComponent],
+      imports: [ReactiveFormsModule, NgxPaginationModule, HttpClientModule, AppRoutingModule]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
