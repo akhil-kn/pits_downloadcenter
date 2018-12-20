@@ -12,6 +12,6 @@ export class DownloadCenterService {
   constructor(private _http: HttpClient) { }
 
   getData(): Observable<object> {
-    return this._http.get('assets/json/data.json');
+    return this._http.get(`${environment.apiURL}`);
   }
 }

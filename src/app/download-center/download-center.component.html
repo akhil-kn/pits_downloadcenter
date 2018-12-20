@@ -7,15 +7,15 @@
     <ng-template #filter_container>
       <div class="filter-wrapper">
         <div class="filter-wrap clearfix">
-          <form action="javascript:void(0);;" [formGroup]="filterFormGroup" class="filter">
-            <div class="row">
+          <form action="javascript:void(0);" [formGroup]="filterFormGroup" class="filter">
+            <div class="row" *ngIf="!listData?.settings?.keyword_search">
               <label class="control-label subheading clearfix"> Keyword Search </label>
               <div class="input-group">
                 <input type="text" class="form-control" placeholder="Search Keyword" formControlName="keyword_search">
                 <span class="input-group-addon" (click)="resetFieldByType('keyword_search')"></span>
               </div>
             </div>
-            <div class="row">
+            <div class="row" *ngIf="!listData?.settings?.categories">
               <label class="control-label subheading clearfix"> Filter by Area </label>
               <div class="input-group">
                 <div class="cust-select">
@@ -39,7 +39,7 @@
                 </div>
               </div>
             </div>
-            <div class="row chk-box clearfix">
+            <div class="row chk-box clearfix" *ngIf="!listData?.settings?.file_types">
               <label class="control-label subheading clearfix"> Filter by file types </label>
               <div class="chk-box-blue ng-scope" *ngFor="let type of listData?.types;trackBy: trackByFn">
                 <label class="control-label">

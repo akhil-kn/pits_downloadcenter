@@ -20,8 +20,7 @@ interface FilterConfig {
 
 @Component({
   selector: 'app-download-center',
-  templateUrl: './download-center.component.html',
-  styleUrls: ['./download-center.component.scss']
+  templateUrl: './download-center.component.html'
 })
 export class DownloadCenterComponent implements OnInit, OnDestroy {
   public orderByField = '';
@@ -108,8 +107,8 @@ export class DownloadCenterComponent implements OnInit, OnDestroy {
 
   private _keyWordFilter(data: object) {
     const keyword_search = this.filterConfig.keyword_search;
-    const searchString = data['title'] + data['size'] + data['extension'];
-    return !keyword_search || searchString.toLowerCase().indexOf(keyword_search.trim()) !== -1;
+    const searchString = (data['title'] + data['size'] + data['extension']).toLowerCase();
+    return !keyword_search || searchString.indexOf(keyword_search.toLowerCase().trim()) !== -1;
   }
 
   private _categoryFilter(data: object) {
