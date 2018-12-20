@@ -2,10 +2,11 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { PaginationInstance } from 'ngx-pagination';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 
 import { DownloadCenterService } from './download-center.service';
+
+import { Subject } from 'rxjs';
+import { takeUntil, take } from 'rxjs/operators';
 
 import * as _ from 'lodash';
 
@@ -14,6 +15,7 @@ interface FilterConfig {
   category: string;
   sub_category: string;
   file_types: string[];
+  cPage: string;
 }
 
 @Component({
@@ -29,7 +31,7 @@ export class DownloadCenterComponent implements OnInit, OnDestroy {
   public subCategories = [];
   public loading = false;
   public filterFormGroup: FormGroup;
-  public filterConfig: FilterConfig = { keyword_search: '', category: '', sub_category: '', file_types: [] };
+  public filterConfig: FilterConfig = { keyword_search: '', category: '', sub_category: '', file_types: [], cPage: '1' };
   public config: PaginationInstance = { id: 'custom', itemsPerPage: 10, currentPage: 1 };
 
   private _unsubscribe$ = new Subject();
@@ -71,8 +73,9 @@ export class DownloadCenterComponent implements OnInit, OnDestroy {
 
   private _listenActivatedRoute(): void {
     this._activatedRoute.queryParams
-      .pipe(takeUntil(this._unsubscribe$))
+      .pipe(take(1))
       .subscribe((params) => {
+        this.config.currentPage = this.filterConfig.cPage = params['cPage'];
         params['category'] && this.fetchSubCategory(params['category']);
         this.filterConfig.file_types = params['file_types'] ? params['file_types'].split(',') : [];
         this.filterFormGroup.patchValue(params);
@@ -99,6 +102,7 @@ export class DownloadCenterComponent implements OnInit, OnDestroy {
   }
 
   private _setRouting(config: FilterConfig): void {
+    console.log('setrouting', config);
     const queryParams = _.join(Object.keys(config).filter((key) => !!config[key].length).map((key) => `${key}=${config[key]}`), '&&');
     this._router.navigateByUrl(`/download-center?${queryParams}`);
   }
@@ -106,7 +110,7 @@ export class DownloadCenterComponent implements OnInit, OnDestroy {
   private _keyWordFilter(data: object) {
     const keyword_search = this.filterConfig.keyword_search;
     const searchString = data['title'] + data['size'] + data['extension'];
-    return !keyword_search || searchString.toLowerCase().indexOf(keyword_search) !== -1;
+    return !keyword_search || searchString.toLowerCase().indexOf(keyword_search.trim()) !== -1;
   }
 
   private _categoryFilter(data: object) {
@@ -161,6 +165,12 @@ export class DownloadCenterComponent implements OnInit, OnDestroy {
     this.reverseSort = !this.reverseSort;
     const sort_order = !this.reverseSort ? 'asc' : 'desc';
     this.listData['files'] = _.orderBy(this.listData['files'], order_by, sort_order);
+  }
+
+  public onPageChange(page: number): void {
+    this.filterConfig.cPage = page + '';
+    this.config.currentPage = page;
+    this._setRouting(this.filterConfig);
   }
 
   ngOnDestroy() {

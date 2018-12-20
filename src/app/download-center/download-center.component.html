@@ -108,7 +108,7 @@
         </div>
         <div class="other-controller clearfix">
           <div class="text-center">
-            <pagination-template #p="paginationApi" [id]="config.id" (pageChange)="config.currentPage = $event">
+            <pagination-template #p="paginationApi" [id]="config.id" (pageChange)="onPageChange($event)">
               <ul class="pagination" *ngIf="1 < p.pages.length">
                 <li [class.disabled]="p.isFirstPage()">
                   <a href="javascript:void(0);" (click)="p.setCurrent(1)">&laquo;</a>
