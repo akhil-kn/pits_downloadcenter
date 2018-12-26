@@ -64,6 +64,7 @@ export class DownloadCenterComponent implements OnInit, OnDestroy {
         this.loading = false;
         this.listData = data;
         this.initialListData = JSON.stringify(data);
+        this.config.itemsPerPage = data['config']['paginationcount'];
         this._listenActivatedRoute();
       }, err => {
         throw err;

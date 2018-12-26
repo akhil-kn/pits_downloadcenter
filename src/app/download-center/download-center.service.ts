@@ -12,6 +12,8 @@ export class DownloadCenterService {
   constructor(private _http: HttpClient) { }
 
   getData(): Observable<object> {
-    return this._http.get(`${environment.apiURL}`);
+    const el = document.getElementById('actionURL');
+    const actionURL = el ? el['value'] : environment.actionURL;
+    return this._http.get(`${actionURL}`);
   }
 }

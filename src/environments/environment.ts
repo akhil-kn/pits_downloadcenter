@@ -4,8 +4,7 @@
 
 export const environment = {
   production: false,
-  baseURL: 'http://demo.mypits.org:10068/',
-  apiURL: 'assets/json/data.json'
+  actionURL: 'assets/json/data.json'
 };
 
 /*
