@@ -113,9 +113,10 @@ export class DownloadCenterComponent implements OnInit, OnDestroy {
   }
 
   private _categoryFilter(data: object) {
-    const category = this.filterConfig.category;
-    const categoryArray = [category, ...this.subCategories.map(sub => '' + sub.id)];
-    return !category || categoryArray.indexOf(data['categories'][0]) !== -1;
+    const categoryId = this.filterConfig.category;
+    const subCategories = this.fetchSubCategory(+categoryId, true).map(sub => `${sub['id']}`);
+    const categories = [categoryId, ...subCategories];
+    return !categoryId || categories.indexOf(data['categories'][0]) !== -1;
   }
 
   private _fileTypeFilter(data: object) {
@@ -129,10 +130,11 @@ export class DownloadCenterComponent implements OnInit, OnDestroy {
     return !sub_category || data['categories'][0] === sub_category;
   }
 
-  public fetchSubCategory(id: number): void {
+  public fetchSubCategory(id: number, resetDisable?: boolean): object[] {
     const data = this.listData['categories'].filter((category) => category.id === +id);
     this.subCategories = data.length ? data[0]['input'] : [];
-    this.resetFieldByType('sub_category');
+    !resetDisable && this.resetFieldByType('sub_category');
+    return this.subCategories;
   }
 
   public patchFileTypes(id: string, checked: boolean) {
