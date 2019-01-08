@@ -1,7 +1,8 @@
 <h1>Download Center</h1>
 <div id="downloadcenter" class="wrap filter43">
   <div id="loader" *ngIf="loading; else filter_container">
-    <!-- <img src="./typo3conf/ext/pits_downloadcenter/Resources/Public/Icons/ajax-loader.gif" alt="Loader-Image"> -->
+    <img *ngIf="baseURL" src="{{baseURL['value']}}typo3conf/ext/pits_downloadcenter/Resources/Public/Icons/ajax-loader.gif"
+      alt="Loader-Image">
   </div>
   <ng-template #filter_container>
     <div class="filter-wrapper">
@@ -112,7 +113,7 @@
                 <a href="javascript:void(0);" (click)="p.setCurrent(page.label)">{{ page.label }}</a>
               </li>
               <li [class.disabled]="p.isLastPage()">
-                <a href="javascript:void(0);" (click)="p.next()">›</a>
+                <a href="javascript:void(0);" (click)="!p.isLastPage()&&p.next()">›</a>
               </li>
               <li [class.disabled]="p.isLastPage()">
                 <a href="javascript:void(0);" (click)="p.setCurrent(p.getLastPage())">&raquo;</a>

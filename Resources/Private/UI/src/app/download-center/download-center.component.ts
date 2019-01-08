@@ -22,6 +22,7 @@ interface FilterConfig {
   templateUrl: './download-center.component.html'
 })
 export class DownloadCenterComponent implements OnInit, OnDestroy {
+  public baseURL = document.getElementById('baseURL');
   public orderByField = '';
   public reverseSort = true;
   public listData = {};
@@ -135,6 +136,7 @@ export class DownloadCenterComponent implements OnInit, OnDestroy {
       this._traverse(this._traverseObj);
     }
     this.listData['files'] = JSON.parse(this._initialListData)['files'];
+    !!this.orderByField && this.sortFileList(this.orderByField, true);
     this.listData['files'] = this.listData['files']
       .filter(this._keyWordFilter.bind(this))
       .filter(this._categoryFilter.bind(this))
@@ -215,9 +217,9 @@ export class DownloadCenterComponent implements OnInit, OnDestroy {
     return item.id;
   }
 
-  public sortFileList(order_by): void {
+  public sortFileList(order_by: string, skip?: boolean): void {
     this.orderByField = order_by;
-    this.reverseSort = !this.reverseSort;
+    !skip && (this.reverseSort = !this.reverseSort);
     const sort_order = !this.reverseSort ? 'asc' : 'desc';
     this.listData['files'] = _.orderBy(this.listData['files'], order_by, sort_order);
   }
