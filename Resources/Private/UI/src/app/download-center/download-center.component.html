@@ -85,7 +85,7 @@
               <tbody>
                 <tr *ngFor="let file of listData?.files| paginate: config;trackBy: trackByFn">
                   <td *ngIf="!!+listData?.config?.showFileIconPreview" data-th="Image" class="item-image">
-                    <img class="img-thumbnail" [src]="file.imageUrl" #img_preview>
+                    <img class="img-thumbnail" style="min-width:45px;height:45px;" [src]="file.imageUrl" #img_preview>
                   </td>
                   <td data-th="Title" class="item-title">{{file.title}}</td>
                   <td data-th="Size">{{file.size}}</td>

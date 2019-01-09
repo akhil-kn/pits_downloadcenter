@@ -135,12 +135,11 @@ export class DownloadCenterComponent implements OnInit, OnDestroy {
       this._setTraverseObj(this.listData['categories'].filter((d) => d.id === +category[0])[0], +category[category.length - 1]);
       this._traverse(this._traverseObj);
     }
-    this.listData['files'] = JSON.parse(this._initialListData)['files'];
-    !!this.orderByField && this.sortFileList(this.orderByField, true);
-    this.listData['files'] = this.listData['files']
+    this.listData['files'] = JSON.parse(this._initialListData)['files']
       .filter(this._keyWordFilter.bind(this))
       .filter(this._categoryFilter.bind(this))
       .filter(this._fileTypeFilter.bind(this));
+    !!this.orderByField && this.sortFileList(this.orderByField, true);
   }
 
   private _setRouting(filterConfig: FilterConfig): void {
