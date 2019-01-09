@@ -51,7 +51,7 @@
             <table id="data-results" class="results" style="display: table;" *ngIf="listData?.files?.length">
               <thead>
                 <tr>
-                  <th *ngIf="!!+listData?.config?.showFileIconPreview"></th>
+                  <th *ngIf="!!+listData?.config?.showthumbnail"></th>
                   <th class="item-title">
                     <a href="javascript:void(0);" (click)="sortFileList('title')">
                       {{listData?.translations?.tabletitle}}
@@ -84,12 +84,12 @@
               </thead>
               <tbody>
                 <tr *ngFor="let file of listData?.files| paginate: config;trackBy: trackByFn">
-                  <td *ngIf="!!+listData?.config?.showFileIconPreview" data-th="Image" class="item-image">
+                  <td *ngIf="!!+listData?.config?.showthumbnail" data-th="Image" class="item-image">
                     <img class="img-thumbnail" style="min-width:45px;height:45px;" [src]="file.imageUrl" #img_preview>
                   </td>
                   <td data-th="Title" class="item-title">{{file.title}}</td>
                   <td data-th="Size">{{file.size}}</td>
-                  <td data-th="Type"> <span class="files file-{{file.extension}}"></span> {{file.fileType}} </td>
+                  <td data-th="Type"> <span *ngIf="!!+listData?.config?.showFileIconPreview" class="files file-{{file.extension}}"></span> {{file.fileType}} </td>
                   <td data-th="Download" class="download">
                     <a [href]="file.downloadUrl" target="_blank" download></a>
                   </td>
