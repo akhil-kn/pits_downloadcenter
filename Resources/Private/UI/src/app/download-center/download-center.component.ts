@@ -172,7 +172,8 @@ export class DownloadCenterComponent implements OnInit, OnDestroy {
 
   private _keyWordFilter(data: object): boolean {
     const keyword_search = this.filterConfig.keyword_search;
-    const searchString = (data['title'] + data['size'] + data['extension']).toLowerCase();
+    const searchKeys = ['title', 'size', 'extension'];
+    const searchString = searchKeys.map(key => data[key]).join('').toLowerCase();
     return !keyword_search || searchString.indexOf(keyword_search.toLowerCase().trim()) !== -1;
   }
 
