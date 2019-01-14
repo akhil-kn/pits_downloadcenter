@@ -60,7 +60,7 @@
                       </span>
                     </a>
                   </th>
-                  <th>
+                  <th *ngIf="!+listData?.config?.hideSizeColumn">
                     <a href="javascript:void(0);" (click)="sortFileList('size')">
                       {{listData?.translations?.tablesize}}
                       <span *ngIf="orderByField == 'size'" class="ng-hide">
@@ -87,10 +87,10 @@
                     <img class="img-thumbnail" style="min-width:45px;height:45px;" [src]="file.imageUrl" #img_preview>
                   </td>
                   <td [attr.data-th]="listData?.translations?.tabletitle" class="item-title">{{file.title}}</td>
-                  <td [attr.data-th]="listData?.translations?.tablesize">{{file.size}}</td>
+                  <td *ngIf="!+listData?.config?.hideSizeColumn" [attr.data-th]="listData?.translations?.tablesize">{{file.size}}</td>
                   <td [attr.data-th]="listData?.translations?.tabletype"> <span *ngIf="!!+listData?.config?.showFileIconPreview" class="files file-{{file.extension}}"></span> {{file.fileType}} </td>
                   <td [attr.data-th]="listData?.translations?.tabledownload" class="download">
-                    <a [href]="file.downloadUrl" target="_blank" download></a>
+                    <a [href]="file.downloadUrl" target="_blank" [attr.download]="!!+listData?.config?.disableForceDownload?null:true"></a>
                   </td>
                 </tr>
               </tbody>
